@@ -14,6 +14,7 @@ use tracing::{error, info};
 use tracing_subscriber::{EnvFilter, FmtSubscriber};
 
 use commands::meta::*;
+use tokio::time::{delay_for, Duration};
 
 struct ShardManagerContainer;
 
@@ -26,11 +27,15 @@ struct Handler;
 #[async_trait]
 impl EventHandler for Handler {
     async fn ready(&self, _: Context, ready: Ready) {
-        info!("Connected as {}", ready.user.name);
-    }
-
-    async fn resume(&self, _: Context, _: ResumedEvent) {
-        info!("Resumed");
+        if let Some(shard) = ready.shard {
+            // Note that array index 0 is 0-indexed, while index 1 is 1-indexed.
+            //
+            // This may seem unintuitive, but it models Discord's behaviour.
+            println!(
+                "{} is connected on shard {}/{}!",
+                ready.user.name, shard[0], shard[1],
+            );
+        }
     }
 }
 
@@ -66,11 +71,28 @@ async fn main() {
         .event_handler(Handler)
         .await
         .expect("Err creating client");
+    let manager = client.shard_manager.clone();
+    tokio::spawn(async move {
+        loop {
+            delay_for(Duration::from_secs(30)).await;
+
+            let lock = manager.lock().await;
+            let shard_runners = lock.runners.lock().await;
+
+            for (id, runner) in shard_runners.iter() {
+                println!(
+                    "Shard ID {} is {} with a latency of {:?}",
+                    id, runner.stage, runner.latency,
+                );
+            }
+        }
+    });
+
     {
         let mut data = client.data.write().await;
         data.insert::<ShardManagerContainer>(client.shard_manager.clone());
     }
-    if let Err(why) = client.start().await {
+    if let Err(why) = client.start_shards(2).await {
         error!("Client error: {:?}", why);
     }
 }
