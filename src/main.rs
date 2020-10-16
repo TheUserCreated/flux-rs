@@ -77,14 +77,14 @@ async fn main() {
             delay_for(Duration::from_secs(30)).await;
 
             let lock = manager.lock().await;
-            let shard_runners = lock.runners.lock().await;
-
-            for (id, runner) in shard_runners.iter() {
-                println!(
-                    "Shard ID {} is {} with a latency of {:?}",
-                    id, runner.stage, runner.latency,
-                );
-            }
+            //let shard_runners = lock.runners.lock().await;
+            //These commented lines are potentially useful, but I do not need them right now.
+            //for (id, runner) in shard_runners.iter() {
+            //println!(
+            //        "Shard ID {} is {} with a latency of {:?}",
+            //       id, runner.stage, runner.latency,
+            //   );
+            //}
         }
     });
 
