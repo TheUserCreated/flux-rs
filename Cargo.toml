@@ -1,0 +1,22 @@
+[package]
+name = "flux-rs"
+version = "0.1.0"
+authors = ["TheUserCreated <zalgo@tuta.io>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dotenv = "0.15"
+tracing = "0.1"
+tracing-subscriber = "0.2"
+tracing-futures = "0.2"
+
+
+[dependencies.serenity]
+git = "https://github.com/serenity-rs/serenity.git"
+branch = "current"
+
+[dependencies.tokio]
+version = "0.2"
+features = ["macros"]
