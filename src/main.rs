@@ -17,11 +17,13 @@ use tracing_subscriber::{EnvFilter, FmtSubscriber};
 use commands::meta::*;
 
 use crate::commands::config::*;
-use crate::helpers::db;
+use crate::helpers::*;
 use crate::structures::data::{ConnectionPool, PrefixMap};
 mod commands;
 mod helpers;
+mod moderation;
 mod structures;
+use crate::moderation::purge::*;
 
 struct ShardManagerContainer;
 
@@ -47,7 +49,7 @@ impl EventHandler for Handler {
 }
 
 #[group]
-#[commands(ping, die, prefix)]
+#[commands(ping, die, prefix, purge)]
 struct General;
 
 #[tokio::main]
