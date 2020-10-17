@@ -33,6 +33,15 @@ impl TypeMapKey for ShardManagerContainer {
 
 struct Handler;
 
+//TODO Ban command, kick command
+
+//TODO Mute timers (how to handle bot restarts?) and mute role in database
+//TODO tool to make database if none is available
+//TODO help command(s)
+//TODO reminders
+//TODO maybe a scheduler or timer object? (storing object on disk via .RON?)
+//TODO invite command (ez)
+
 #[async_trait]
 impl EventHandler for Handler {
     async fn ready(&self, _: Context, ready: Ready) {
