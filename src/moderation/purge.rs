@@ -35,7 +35,6 @@ async fn purge(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     if id {
         let start_id = MessageId::from(num);
         messages = msg.channel_id.messages(ctx, |m| m.after(start_id)).await?;
-        messages = msg.channel_id.messages(ctx, |m| m.after(start_id)).await?;
     } else {
         if num > 100 {
             msg.reply(ctx, "You can't clear more than 100 messages at once")
