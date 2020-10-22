@@ -17,6 +17,7 @@ use tracing_subscriber::{EnvFilter, FmtSubscriber};
 use commands::meta::*;
 
 use crate::commands::config::*;
+use crate::commands::voice::*;
 use crate::helpers::*;
 use crate::structures::data::{ConnectionPool, PrefixMap};
 mod commands;
@@ -24,6 +25,7 @@ mod helpers;
 mod moderation;
 mod structures;
 use crate::moderation::purge::*;
+use crate::structures::data::VoiceManager;
 
 struct ShardManagerContainer;
 
@@ -54,7 +56,7 @@ impl EventHandler for Handler {
 }
 
 #[group]
-#[commands(ping, die, prefix, purge)]
+#[commands(ping, die, prefix, purge, join, leave, say)]
 struct General;
 
 #[tokio::main]
@@ -132,6 +134,7 @@ async fn main() {
         data.insert::<ShardManagerContainer>(client.shard_manager.clone());
         data.insert::<ConnectionPool>(pool);
         data.insert::<PrefixMap>(Arc::new(prefixes));
+        data.insert::<VoiceManager>(Arc::clone(&client.voice_manager));
     }
     if let Err(why) = client.start_shards(2).await {
         error!("Client error: {:?}", why);

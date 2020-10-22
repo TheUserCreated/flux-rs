@@ -1,6 +1,7 @@
 pub struct PrefixMap;
 
 use dashmap::DashMap;
+use serenity::client::bridge::voice::ClientVoiceManager;
 use serenity::{
     client::bridge::gateway::ShardManager,
     model::id::{GuildId, UserId},
@@ -22,4 +23,9 @@ pub struct ConnectionPool;
 
 impl TypeMapKey for ConnectionPool {
     type Value = PgPool;
+}
+pub struct VoiceManager;
+
+impl TypeMapKey for VoiceManager {
+    type Value = Arc<Mutex<ClientVoiceManager>>;
 }
