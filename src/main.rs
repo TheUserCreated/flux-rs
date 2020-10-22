@@ -32,10 +32,6 @@ impl TypeMapKey for ShardManagerContainer {
 }
 
 struct Handler;
-
-//TODO Ban command, kick command
-
-//TODO Mute timers (how to handle bot restarts?) and mute role in database
 //TODO tool to make database if none is available
 //TODO help command(s)
 //TODO reminders
